@@ -2,46 +2,32 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const admin = require('firebase-admin');
+const bodyParser = require('body-parser');
 
-// Initialize Firebase Admin
-let serviceAccount = {};
-if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-  try {
-    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-  } catch (e) {
-    console.error('Invalid FIREBASE_SERVICE_ACCOUNT JSON.');
-    process.exit(1);
-  }
-}
+const initFirebaseAdmin = require('./firebaseAdmin');
+const usersRouter = require('./routes/users');
+const chatsRouter = require('./routes/chats');
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
-const db = admin.firestore();
-
-const authRoutes = require('./routes/auth');
-const usersRoutes = require('./routes/users');
-const chatsRoutes = require('./routes/chats');
-const { verifyFirebaseToken } = require('./middleware/firebaseAuth');
+// Initialize Firebase Admin SDK
+initFirebaseAdmin();
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
-app.use(express.json());
 app.use(morgan('dev'));
+app.use(bodyParser.json());
 
-app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
+app.get('/health', (req, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
 
-// Public routes
-app.use('/api/auth', authRoutes);
+app.use('/api/users', usersRouter);
+app.use('/api/chats', chatsRouter);
 
-// Protected routes
-app.use('/api/users', verifyFirebaseToken, usersRoutes);
-app.use('/api/chats', verifyFirebaseToken, chatsRoutes);
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Internal server error' });
+});
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
-
-module.exports = { app, db, admin };
+app.listen(PORT, () => {
+  console.log(`Rasely server running on port ${PORT}`);
+});
