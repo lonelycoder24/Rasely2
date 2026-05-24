@@ -16,53 +16,57 @@ function Navbar() {
       toast.success('Logged out successfully');
       navigate('/login');
     } catch (error) {
-      toast.error('Failed to logout');
+      toast.error('Logout failed');
     }
   };
 
   return (
-    <motion.nav
-      initial={{ x: -100 }}
+    <motion.div
+      initial={{ x: -300 }}
       animate={{ x: 0 }}
-      className="w-64 bg-gradient-to-b from-blue-600 to-indigo-600 text-white shadow-lg flex flex-col"
+      className="w-64 bg-gradient-to-b from-blue-600 to-indigo-600 text-white p-6 flex flex-col"
     >
-      <div className="p-6 border-b border-blue-500">
-        <h1 className="text-2xl font-bold mb-2">Rasely</h1>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Rasely</h1>
         <p className="text-blue-100 text-sm">Social Messenger</p>
       </div>
 
-      <div className="flex-1 p-6">
-        <div className="bg-blue-500 bg-opacity-50 rounded-lg p-4 mb-6">
-          <p className="text-sm text-blue-100 mb-1">Logged in as</p>
-          <p className="font-semibold truncate">{user?.displayName}</p>
-          <p className="text-xs text-blue-100 truncate">{user?.email}</p>
+      <div className="bg-white bg-opacity-10 rounded-lg p-4 mb-8">
+        <div className="w-12 h-12 rounded-full bg-white bg-opacity-20 flex items-center justify-center mb-3">
+          <span className="text-xl font-bold">{user?.displayName?.[0]?.toUpperCase()}</span>
         </div>
-
-        <div className="space-y-2">
-          <button
-            onClick={() => navigate('/')}
-            className="w-full text-left px-4 py-2 rounded-lg hover:bg-blue-500 transition"
-          >
-            🏠 Home
-          </button>
-          <button
-            onClick={() => navigate(`/profile/${user?.uid}`)}
-            className="w-full text-left px-4 py-2 rounded-lg hover:bg-blue-500 transition"
-          >
-            👤 My Profile
-          </button>
-        </div>
+        <p className="font-semibold">{user?.displayName}</p>
+        <p className="text-sm text-blue-100 truncate">{user?.email}</p>
       </div>
 
-      <div className="p-6 border-t border-blue-500">
+      <nav className="flex-1">
         <button
-          onClick={handleLogout}
-          className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition"
+          onClick={() => navigate('/')}
+          className="w-full text-left px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition mb-2"
         >
-          Logout
+          💬 Chats
         </button>
-      </div>
-    </motion.nav>
+        <button
+          onClick={() => navigate(`/profile/${user?.uid}`)}
+          className="w-full text-left px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition mb-2"
+        >
+          👤 My Profile
+        </button>
+        <button
+          onClick={() => navigate('/')}
+          className="w-full text-left px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition"
+        >
+          🔍 Discover
+        </button>
+      </nav>
+
+      <button
+        onClick={handleLogout}
+        className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition"
+      >
+        Logout
+      </button>
+    </motion.div>
   );
 }
 
