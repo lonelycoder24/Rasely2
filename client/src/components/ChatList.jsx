@@ -1,44 +1,53 @@
-import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { format } from 'date-fns';
 
 function ChatList({ chats }) {
   const navigate = useNavigate();
 
   if (!chats || chats.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-gray-500">
+      <div className="flex items-center justify-center h-full">
         <div className="text-center">
-          <p className="text-lg font-semibold mb-2">No chats yet</p>
-          <p className="text-sm">Start a new conversation</p>
+          <p className="text-gray-500 text-lg mb-4">No chats yet</p>
+          <p className="text-gray-400">Start by selecting a user to message</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="divide-y">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="divide-y divide-gray-200"
+    >
       {chats.map((chat, index) => (
         <motion.div
           key={chat.id}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: index * 0.05 }}
+          transition={{ delay: index * 0.1 }}
           onClick={() => navigate(`/chat/${chat.id}`)}
-          className="p-4 hover:bg-gray-100 cursor-pointer transition"
+          className="bg-white p-4 hover:bg-blue-50 cursor-pointer transition border-l-4 border-transparent hover:border-blue-600"
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-white font-bold">
-              {chat.name?.[0]?.toUpperCase()}
+              {chat.name?.[0]?.toUpperCase() || 'C'}
             </div>
-            <div className="flex-1">
-              <h3 className="font-semibold text-gray-900">{chat.name}</h3>
-              <p className="text-sm text-gray-600 truncate">{chat.lastMessage || 'Start a conversation'}</p>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-gray-800">{chat.name}</h3>
+              <p className="text-sm text-gray-500 truncate">{chat.lastMessage || 'No messages yet'}</p>
             </div>
-            <div className="text-xs text-gray-500">{chat.updatedAt}</div>
+            {chat.lastMessageTime && (
+              <p className="text-xs text-gray-400 whitespace-nowrap">
+                {format(new Date(chat.lastMessageTime?.seconds * 1000), 'MMM d')}
+              </p>
+            )}
           </div>
         </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 }
 
