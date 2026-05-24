@@ -3,39 +3,54 @@ import { motion } from 'framer-motion';
 
 function MessageInput({ onSendMessage }) {
   const [message, setMessage] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSend = () => {
     if (message.trim()) {
       onSendMessage(message);
       setMessage('');
+      setIsTyping(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
     }
   };
 
   return (
-    <motion.form
-      initial={{ y: 20 }}
-      animate={{ y: 0 }}
-      onSubmit={handleSubmit}
-      className="p-4 bg-gray-50 border-t border-gray-200 flex gap-2"
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      className="border-t border-gray-200 p-4 bg-white"
     >
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="Type a message..."
-        className="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        type="submit"
-        disabled={!message.trim()}
-        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        Send
-      </motion.button>
-    </motion.form>
+      <div className="flex gap-3 items-end">
+        <div className="flex-1">
+          <textarea
+            value={message}
+            onChange={(e) => {
+              setMessage(e.target.value);
+              setIsTyping(e.target.value.length > 0);
+            }}
+            onKeyPress={handleKeyPress}
+            placeholder="Type a message..."
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            rows="2"
+          />
+        </div>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleSend}
+          disabled={!message.trim()}
+          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+        >
+          Send
+        </motion.button>
+      </div>
+    </motion.div>
   );
 }
 
