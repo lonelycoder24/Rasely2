@@ -3,39 +3,34 @@ import { motion } from 'framer-motion';
 
 function MessageInput({ onSendMessage }) {
   const [message, setMessage] = useState('');
-  const [sending, setSending] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!message.trim()) return;
-
-    setSending(true);
-    await onSendMessage(message);
-    setMessage('');
-    setSending(false);
+    if (message.trim()) {
+      onSendMessage(message);
+      setMessage('');
+    }
   };
 
   return (
     <motion.form
-      initial={{ y: 20 }}
+      initial={{ y: 100 }}
       animate={{ y: 0 }}
       onSubmit={handleSubmit}
-      className="border-t border-gray-200 p-4 bg-white flex gap-2"
+      className="bg-white border-t border-gray-200 p-4 flex gap-2"
     >
       <input
         type="text"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Type a message..."
-        disabled={sending}
-        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <button
         type="submit"
-        disabled={sending || !message.trim()}
-        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 font-semibold"
+        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-semibold"
       >
-        {sending ? 'Sending...' : 'Send'}
+        Send
       </button>
     </motion.form>
   );
