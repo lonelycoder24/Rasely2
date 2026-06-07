@@ -1,30 +1,33 @@
 const admin = require('firebase-admin');
 
-module.exports = function initFirebaseAdmin() {
-  if (admin.apps.length) return admin.app();
+function initFirebase() {
+  if (admin.apps && admin.apps.length) return admin.app();
 
-  const projectId = process.env.FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  let privateKey = process.env.FIREBASE_PRIVATE_KEY;
-
-  if (!projectId || !clientEmail || !privateKey) {
-    console.warn('Missing Firebase Admin credentials in environment. Firebase Admin will not initialize.');
-    return null;
+  if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    // FIREBASE_SERVICE_ACCOUNT should be a JSON string (escape newlines when setting in env/secrets)
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+      databaseURL: process.env.FIREBASE_DATABASE_URL || undefined,
+    });
+    console.log('Firebase Admin initialized using FIREBASE_SERVICE_ACCOUNT');
+  } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    // Use application default credentials (path to service account JSON file)
+    admin.initializeApp({
+      credential: admin.credential.applicationDefault(),
+      databaseURL: process.env.FIREBASE_DATABASE_URL || undefined,
+    });
+    console.log('Firebase Admin initialized using GOOGLE_APPLICATION_CREDENTIALS');
+  } else {
+    console.warn('No Firebase credentials found in env. Set FIREBASE_SERVICE_ACCOUNT or GOOGLE_APPLICATION_CREDENTIALS');
   }
 
-  // Replace escaped newlines (if set via env) with actual newlines
-  privateKey = privateKey.replace(/\\n/g, '\n');
-
-  const credential = {
-    projectId,
-    clientEmail,
-    privateKey,
-  };
-
-  admin.initializeApp({
-    credential: admin.credential.cert(credential),
-  });
-
-  console.log('Firebase Admin initialized');
   return admin.app();
+}
+
+module.exports = {
+  initFirebase,
+  admin,
+  db: () => admin.firestore(),
+  auth: () => admin.auth(),
 };
