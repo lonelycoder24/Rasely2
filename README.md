@@ -1,40 +1,33 @@
 # Rasely
 
-Rasely is a social-messenger hybrid app concept that combines profile management, messaging, group chat, notifications, and privacy controls.
-
-## Current status
-
-This repository has been initialized with a working React + Vite client app and Firebase-ready configuration. The app is not yet a complete messaging platform, but it is now set up as a clean MVP foundation.
+Rasely is a social-messenger hybrid app. The current MVP includes a React + Vite frontend and Firebase Authentication with Google and email/password sign-in.
 
 ## Run locally
 
 ```bash
 cd client
 npm install
+cp .env.example .env
 npm run dev
 ```
 
+Open the local URL printed by Vite. Restart the dev server after changing `.env` values.
+
 ## Firebase setup
 
-1. Create a Firebase project.
-2. Add a web app to the project and copy the configuration values.
-3. Copy `client/.env.example` to `client/.env`.
-4. Fill in your Firebase values.
-5. In Firebase Console, enable:
-   - Authentication
-   - Firestore Database
-   - Storage (for media sharing)
+1. Create a Firebase project and register a web app.
+2. Copy the web app configuration into `client/.env` (use `client/.env.example` as the template).
+3. In Firebase Console, open **Authentication → Sign-in method** and enable **Email/Password** and **Google**.
+4. Under **Authentication → Settings → Authorized domains**, add your deployed site domain. Localhost is normally available for local development.
+5. Create a Firestore database when you are ready to build profiles and messaging.
 
-## Planned MVP features
+The web config values are public client identifiers, not server credentials. Never commit service account keys or other private credentials. Restrict the Firebase API key to the APIs and sites you use where applicable.
 
-- User profiles
-- Sign in / sign up
-- Messaging list and chat view
-- Group chats
-- Media upload support
-- Notifications
-- Privacy controls
+## Current scope
 
-## Notes
+- Email/password account creation and sign-in
+- Google sign-in popup
+- Password reset email
+- Authenticated welcome screen and sign-out
 
-The current code is intentionally simple and focused on getting the project started. It is designed so you can add Firebase-backed features gradually without reworking the app structure.
+Messaging, profiles stored in Firestore, groups, media uploads, and notifications are not implemented yet.
