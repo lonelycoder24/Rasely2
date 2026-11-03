@@ -1,54 +1,40 @@
-# Rasely: A Social-Messenger Hybrid App
+# Rasely
 
-## Project Overview
-Rasely is a cutting-edge application that combines the best features of social networking and messaging. It provides users with a seamless experience, allowing them to connect, communicate, and collaborate with friends and family.
+Rasely is a social-messenger hybrid app concept that combines profile management, messaging, group chat, notifications, and privacy controls.
 
-## Features
-- **User Profiles**: Create and manage personal profiles.
-- **Chat Functionality**: Real-time messaging with status indicators.
-- **Multimedia Sharing**: Share photos, videos, and other files.
-- **Group Chats**: Communicate with multiple users simultaneously.
-- **Contact Management**: Easily manage your connections.
-- **Notifications**: Keep informed about messages, likes, and comments.
-- **Privacy Controls**: Customizable privacy settings for user data.
+## Current status
 
-## Installation
-1. Clone this repository:  
-   `git clone https://github.com/smallkm24/Mosi.git`
-2. Navigate into the project directory:  
-   `cd Mosi`
-3. Install dependencies:  
-   `npm install`
-4. Start the application:  
-   `npm start`
+This repository has been initialized with a working React + Vite client app and Firebase-ready configuration. The app is not yet a complete messaging platform, but it is now set up as a clean MVP foundation.
 
-## Usage
-Once the application is running, you can:
-- Register or log in.
-- Start chatting with your contacts.
-- Create groups to talk with friends.
-- Share your thoughts and photos with your followers.
+## Run locally
 
-## Contributing
-Contributions are welcome! Please follow these steps:
-- Fork the repository.
-- Create a new branch for your feature or bug fix.  
-   `git checkout -b feature-Name`
-- Commit your changes:  
-   `git commit -m 'Add new feature'`
-- Push to the branch:  
-   `git push origin feature-Name`
-- Open a pull request.
+```bash
+cd client
+npm install
+npm run dev
+```
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Firebase setup
 
-## Contact
-For questions, suggestions, or issues, reach out to the project maintainers at smallkm24@example.com.
+1. Create a Firebase project.
+2. Add a web app to the project and copy the configuration values.
+3. Copy `client/.env.example` to `client/.env`.
+4. Fill in your Firebase values.
+5. In Firebase Console, enable:
+   - Authentication
+   - Firestore Database
+   - Storage (for media sharing)
 
-## Acknowledgements
-- Thanks to all the contributors who helped make Rasely a reality!  
-- Inspired by great messaging and social media platforms around the world.
+## Planned MVP features
 
-## Date of Last Update
-2026-04-19 21:05:21 (UTC)
+- User profiles
+- Sign in / sign up
+- Messaging list and chat view
+- Group chats
+- Media upload support
+- Notifications
+- Privacy controls
+
+## Notes
+
+The current code is intentionally simple and focused on getting the project started. It is designed so you can add Firebase-backed features gradually without reworking the app structure.
