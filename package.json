@@ -1,10 +1,13 @@
 {
   "name": "rasely",
   "private": true,
-  "workspaces": ["client"],
+  "workspaces": ["client", "server"],
   "scripts": {
-    "dev": "npm run dev --workspace client",
-    "build": "npm run build --workspace client",
-    "preview": "npm run preview --workspace client"
+    "dev": "concurrently -k -n api,web -c yellow,cyan \"npm run dev --workspace @rasely/server\" \"npm run dev --workspace @rasely/client\"",
+    "build": "npm run build --workspace @rasely/client",
+    "start": "npm run start --workspace @rasely/server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
   }
 }
