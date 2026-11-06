@@ -1,1 +1,10 @@
-{"name": "Mosi", "private": true, "workspaces": ["client/*", "server/*"]}
+{
+  "name": "rasely",
+  "private": true,
+  "workspaces": ["client"],
+  "scripts": {
+    "dev": "npm run dev --workspace client",
+    "build": "npm run build --workspace client",
+    "preview": "npm run preview --workspace client"
+  }
+}
